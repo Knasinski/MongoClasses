@@ -11,20 +11,37 @@ var app = express();
 //App.use handles the middleware 
 app.use(bodyParser.json());
 
-app.post('/todos', (req, res) => {
+app.post('/todos', (req, res) => 
+    {
     var todo = new Todo({
       text: req.body.text
     });
   
-    todo.save().then((doc) => {
+    todo.save().then((doc) => 
+    {
       res.send(doc);
-    }, (e) => {
+    }, (e) => 
+    {
       res.status(400).send(e);
     });
   });
   
-  app.listen(8080, () => {
+  app.listen(8080, () => 
+  {
     console.log('Started on port 8080');
   });
+
+  app.get('/todos', (req,res) =>
+    {
+        Todo.find().then((todos) =>
+        {
+            res.send({todos});
+        }, 
+        (e) =>
+        {
+            res.status(400).send(e);
+            //console.log(`Error writing todos: ${e}`);
+        });
+    });
   
   module.exports = {app};
