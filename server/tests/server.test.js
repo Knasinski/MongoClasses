@@ -3,8 +3,9 @@ const request = require('supertest');
 
 const {app} = require('./../server');
 const {Todo} = require('./../models/todo');
+const {ObjectID} = require('mongodb');
 
-console.log(`App = ${app}`)
+var badID = '5af5d1b2b4de400fe8cd0fd9';
 
 //Run this before each and every test case: Testing lifecycle method/  makes sure db is mt
 // beforeEach((done) =>
@@ -14,14 +15,12 @@ console.log(`App = ${app}`)
 // });
 
 const MyTodos = [
-    {text: 'Todo #1'},
-    {text: 'Todo #2'},
-    {text: 'Todo #3'},
-    {text: 'Todo #4'},
-    {text: 'Todo #5'},
-    {text: 'Todo #6'},
-    {text: 'Todo #7'},
-    {text: 'Todo #8'}];
+    {_id:  new ObjectID(), text: 'Todo #1'},
+    {_id:  new ObjectID(), text: 'Todo #2'},
+    {_id:  new ObjectID(), text: 'Todo #3'},
+    {_id:  new ObjectID(), text: 'Todo #4'},
+    {_id:  new ObjectID(), text: 'Todo #5'},
+    {_id:  new ObjectID(), text: 'Todo #6'}];
 
 beforeEach((done) =>
 {
@@ -98,3 +97,33 @@ describe('GET /todos', () =>
             .end(done);
     });
 });
+
+describe('GET /todos/:id', () => {
+    it('Should return the todo for the valid ID', (done) => {
+        //Supertest request
+        request(app)
+            .get(`/todos/${MyTodos[4]._id.toHexString()}`)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.text).toBe(MyTodos[4].text);
+            })
+            .end(done);
+        });
+
+        it('Should return 404 when todo is not found', (done) => {
+            var hid = new ObjectID('5af5d1b2b4de400fe8cd0fd9');
+            //Supertest request
+            request(app)
+                .get(`/todos/${hid}`)
+                .expect(404)
+                .end(done);
+            });
+
+            it('Should return 404 when non-object ID used', (done) => {
+                //Supertest request
+                request(app)
+                    .get('/todos/123')
+                    .expect(404)
+                    .end(done);
+                });
+    });
