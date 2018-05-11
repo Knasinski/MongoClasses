@@ -36,6 +36,15 @@ app.post(Url, (req, res) =>
       });
 });
 
+//GET todos route
+app.get(Url, (req, res) => {
+  Todo.find().then((todos) => {
+    res.send({todos});
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
+
 app.listen(PortNum, () =>
 {
   console.log(`Listening on port #${PortNum}, APP = ${app}`);

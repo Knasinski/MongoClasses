@@ -7,10 +7,28 @@ const {Todo} = require('./../models/todo');
 console.log(`App = ${app}`)
 
 //Run this before each and every test case: Testing lifecycle method/  makes sure db is mt
+// beforeEach((done) =>
+// {
+//     //86 all previously defined records
+//     Todo.remove({}).then(() =>  done());
+// });
+
+const MyTodos = [
+    {text: 'Todo #1'},
+    {text: 'Todo #2'},
+    {text: 'Todo #3'},
+    {text: 'Todo #4'},
+    {text: 'Todo #5'},
+    {text: 'Todo #6'},
+    {text: 'Todo #7'},
+    {text: 'Todo #8'}];
+
 beforeEach((done) =>
 {
     //86 all previously defined records
-    Todo.remove({}).then(() =>  done());
+    Todo.remove({}).then(() =>  {
+        Todo.insertMany(MyTodos);
+    }).then(() => done());
 });
 
 describe('POST /todos', () =>
@@ -35,7 +53,8 @@ describe('POST /todos', () =>
                     return done(err);
                 }
 
-                Todo.find().then((todos) =>
+                //With the {text} inserted below, this only counts text not matching our list
+                Todo.find({text}).then((todos) =>
                 {
                     expect(todos.length).toBe(1);
                     expect(todos[0].text).toBe(text);
@@ -59,10 +78,23 @@ describe('POST /todos', () =>
 
                 Todo.find().then((todos) =>
                 {
-                    expect(todos.length).toBe(0);
+                    expect(todos.length).toBe(MyTodos.length);
                     done();
                 }).catch((e) => done(e));
             });
     });
+});
 
+describe('GET /todos', () =>
+{
+    it('Should get all todos', (done) =>
+    {
+        request(app)
+            .get('/todos')
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todos.length).toBe(MyTodos.length);
+            })
+            .end(done);
+    });
 });
