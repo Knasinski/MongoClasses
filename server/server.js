@@ -10,6 +10,7 @@ var Url = '/todos';    //Standard resource creation Url
 
 var app = express();
 
+
 //CRUD Create, Read, Update, Delete
 
 
@@ -37,18 +38,7 @@ app.post(Url, (req, res) =>
 
 app.listen(PortNum, () =>
 {
-  console.log(`Listening on port #${PortNum}`);
+  console.log(`Listening on port #${PortNum}, APP = ${app}`);
 });
 
-    // var newTodo3 = new Todo(
-    //   {
-    //     text: "Jerry Garcia"
-    //   });
-  
-    //   newTodo3.save().then((doc) =>
-    //   {
-    //       console.log(`Doc = ${JSON.stringify(doc,undefined,2)}`)
-    //   }, (e) =>
-    //   {
-    //       console.log(`Unable to save Todo: ${e}`);
-    //   });
+module.exports = {app};

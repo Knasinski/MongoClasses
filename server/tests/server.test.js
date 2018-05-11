@@ -4,6 +4,8 @@ const request = require('supertest');
 const {app} = require('./../server');
 const {Todo} = require('./../models/todo');
 
+console.log(`App = ${app}`)
+
 //Run this before each and every test case: Testing lifecycle method/  makes sure db is mt
 beforeEach((done) =>
 {
@@ -41,7 +43,6 @@ describe('POST /todos', () =>
                 }).catch((e) => done(e));
             });
     });
-
     it ('Should NOT create a new Todo because the data is NOT good', (done) =>
     {
         //Make requests via supertest
@@ -63,4 +64,5 @@ describe('POST /todos', () =>
                 }).catch((e) => done(e));
             });
     });
+
 });
