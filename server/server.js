@@ -1,30 +1,54 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var {mongoose} = require('./db/mongoose');
-var {Todo} = require('./models/todo');
-var {User} = require('./models/user');
 
-//CRUD = Create, Read, Update, Delete
-//Take JSON and convert into an object
+var {mongoose} =  require('./db/mongoose');
+var {User} = require('./models/user');
+var {Todo} = require('./models/todo');
+
+var PortNum = 8080;
+var Url = '/todos';    //Standard resource creation Url
+
 var app = express();
 
-//App.use handles the middleware 
+//CRUD Create, Read, Update, Delete
+
+
+//Midleware configuration
 app.use(bodyParser.json());
 
-app.post('/todos', (req, res) => {
-    var todo = new Todo({
-      text: req.body.text
-    });
+//Create first route
+app.post(Url, (req, res) =>
+{
+    //console.log(`Req/body = ${JSON.stringify(req.body,undefined,2)}`);
+    var todo = new Todo(
+      {
+        text: req.body.text           //Echoing it right back
+      });
+
+      todo.save().then((doc) =>
+      {
+        res.send(doc);
+      },
+      (e) =>
+      {
+          res.status(400).send(e);
+      });
+});
+
+app.listen(PortNum, () =>
+{
+  console.log(`Listening on port #${PortNum}`);
+});
+
+    // var newTodo3 = new Todo(
+    //   {
+    //     text: "Jerry Garcia"
+    //   });
   
-    todo.save().then((doc) => {
-      res.send(doc);
-    }, (e) => {
-      res.status(400).send(e);
-    });
-  });
-  
-  app.listen(8080, () => {
-    console.log('Started on port 8080');
-  });
-  
-  module.exports = {app};
+    //   newTodo3.save().then((doc) =>
+    //   {
+    //       console.log(`Doc = ${JSON.stringify(doc,undefined,2)}`)
+    //   }, (e) =>
+    //   {
+    //       console.log(`Unable to save Todo: ${e}`);
+    //   });
