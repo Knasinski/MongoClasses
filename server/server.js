@@ -72,7 +72,7 @@ app.get('/todos/:id', (req, res) => {
   });
 });
 
-app.listen(PortNum, () =>
+app.listen(port, () =>
 {
   console.log(`Listening on port #${PortNum}, APP = ${app}`);
 });
