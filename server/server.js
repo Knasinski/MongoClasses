@@ -19,7 +19,6 @@ const port =  process.env.PORT || PortNum;
 //Midleware configuration
 app.use(bodyParser.json());
 
-<<<<<<< HEAD
 //Create first route
 app.post(Url, (req, res) =>
 {
@@ -75,43 +74,7 @@ app.get('/todos/:id', (req, res) => {
 
 app.listen(port, () =>
 {
-  console.log(`Listening on port #${PortNum}, APP = ${app}`);
+  console.log(`Listening on port #${port}, APP = ${app}`);
 });
 
 module.exports = {app};
-=======
-app.post('/todos', (req, res) => 
-    {
-    var todo = new Todo({
-      text: req.body.text
-    });
-  
-    todo.save().then((doc) => 
-    {
-      res.send(doc);
-    }, (e) => 
-    {
-      res.status(400).send(e);
-    });
-  });
-  
-  app.listen(8080, () => 
-  {
-    console.log('Started on port 8080');
-  });
-
-  app.get('/todos', (req,res) =>
-    {
-        Todo.find().then((todos) =>
-        {
-            res.send({todos});
-        }, 
-        (e) =>
-        {
-            res.status(400).send(e);
-            //console.log(`Error writing todos: ${e}`);
-        });
-    });
-  
-  module.exports = {app};
->>>>>>> 90ae2724ca48daa89c2ddec124fd818ca3fc161b
