@@ -10,6 +10,7 @@ var PortNum = 8080;
 var Url = '/todos';    //Standard resource creation Url
 
 var app = express();
+const port =  process.env.PORT || PortNum;
 
 
 //CRUD Create, Read, Update, Delete
